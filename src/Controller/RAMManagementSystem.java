@@ -144,37 +144,45 @@ public class RAMManagementSystem {
     }
     
     public void delete() {
-    System.out.print("Enter the RAM code to delete: ");
-    String code = sc.nextLine().trim();
-
-    RamItems findRam = null;
-    for (RamItems item : ramItems) {
-        if (item.getCode().equalsIgnoreCase(code)) {
-            findRam = item;
-            break;
+        loadFromFile("C:\\Users\\ADMIN\\Desktop\\Laptop RAM Management file gan hoan thien\\RAMModules.dat");
+    
+        System.out.print("Enter the RAM code to delete: ");
+        String codeToDelete = sc.nextLine().trim();
+    
+        RamItems ramToDelete = null;
+        for (RamItems item : ramItems) {
+            if (item.getCode().equalsIgnoreCase(codeToDelete)) {
+                ramToDelete = item;
+                break;
+            }
         }
-    }
+        if (ramToDelete == null) {
+            System.out.println("RAM item does not exist.");
+            System.out.println("Press Enter to go back to the main menu.");
+            sc.nextLine();
+            return;
+        }
+    
+        if (!ramToDelete.isActive()) {
+            System.out.println("The RAM item is already inactive (out of stock).");
+            System.out.println("Press Enter to go back to the main menu.");
+            sc.nextLine();
+            return;
+        }
 
-    if (findRam == null) {
-        System.out.println("RAM item not found.");
+        System.out.print("Are you sure you want to delete this RAM item? (Y/N): ");
+        String confirmation = sc.nextLine().trim();
+    
+        if (confirmation.equalsIgnoreCase("Y")) {
+            ramToDelete.setActive(false);
+            System.out.println("The RAM item has been marked as ( INACTIVE ).");
+        } else {
+            System.out.println("Deletion canceled.");
+        }
         System.out.println("Press Enter to go back to the main menu.");
         sc.nextLine();
-        return;
     }
-
-    if (!findRam.isActive()) {
-        System.out.println("The RAM item is already out of stock.");
-        System.out.println("Press Enter to go back to the main menu.");
-        sc.nextLine();
-        return;
-    }
-
-    findRam.setActive(false);
-    System.out.println("The RAM item has been marked as ( INACTIVE ).");
-
-    System.out.println("Press Enter to go back to the main menu.");
-    sc.nextLine();
-}
+    
         // show hết ram kể cả inactive.
 //    public void showAllItems() {
 //     if (ramItems.isEmpty()) {
